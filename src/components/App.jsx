@@ -5,6 +5,7 @@ import Rates from 'pages/Rates';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchBaseCurrent } from 'redux/operations';
+import { setBaseCurrency } from 'redux/currencySlice';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -19,19 +20,15 @@ export const App = () => {
       const crd = pos.coords;
 
       dispatch(fetchBaseCurrent(crd));
-
-      console.log('Your current position is:');
-      console.log(`Latitude : ${crd.latitude}`);
-      console.log(`Longitude: ${crd.longitude}`);
-      console.log(`More or less ${crd.accuracy} meters.`);
     }
 
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
+      dispatch(setBaseCurrency('USD'));
     }
 
     navigator.geolocation.getCurrentPosition(success, error, options);
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
